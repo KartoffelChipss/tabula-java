@@ -1,6 +1,10 @@
 tabula-java [![Build Status](https://travis-ci.org/tabulapdf/tabula-java.svg?branch=master)](https://travis-ci.org/tabulapdf/tabula-java)
 ===========
 
+> [!NOTE]
+> **This is a fork of [tabulapdf/tabula-java](https://github.com/tabulapdf/tabula-java) that only keeps its dependencies up to date** (e.g. PDFBox, BouncyCastle, JTS).
+> It adds no new features and no functional changes. For issues, feature requests and the original project, please go to the [upstream repository](https://github.com/tabulapdf/tabula-java).
+
 `tabula-java` is a library for extracting tables from PDF files — it is the table extraction engine that powers [Tabula](http://tabula.technology/) ([repo](http://github.com/tabulapdf/tabula)). You can use `tabula-java` as a command-line tool to programmatically extract tables from PDFs.
 
 © 2014-2020 Manuel Aristarán. Available under MIT License. See [`LICENSE`](LICENSE).
