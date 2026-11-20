@@ -28,12 +28,12 @@
 
     <distributionManagement>
         <repository>
-            <id>strassburger-releases</id>
+            <id>strassburger</id>
             <url>https://maven.strassburger.org/releases</url>
         </repository>
         <snapshotRepository>
-            <id>strassburger-snapshots</id>
-            <url>https://maven.strassburger.org/snapshots</url>
+            <id>strassburger</id>
+            <url>https://maven.strassburger.org/releases</url>
         </snapshotRepository>
     </distributionManagement>
 
