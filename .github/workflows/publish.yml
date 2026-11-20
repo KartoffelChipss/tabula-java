@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 2.0.1)'
+        required: true
 
 jobs:
   publish:
@@ -17,12 +21,29 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          distribution: "temurin"
+          java-version: '11'
+          distribution: 'temurin'
           cache: maven
+          # Writes ~/.m2/settings.xml with credentials for the <distributionManagement> server id in pom.xml
           server-id: strassburger
           server-username: SMR_USERNAME
           server-password: SMR_TOKEN
+
+      - name: Determine version
+        id: version
+        env:
+          # Release tag (e.g. v2.0.0) or the manual input
+          RAW_VERSION: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
+        run: |
+          VERSION="${RAW_VERSION#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::'$RAW_VERSION' is not a version like 2.0.0 or v2.0.0"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Set project version
+        run: mvn --batch-mode org.codehaus.mojo:versions-maven-plugin:2.25.2:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
 
       - name: Publish to maven.strassburger.org
         run: mvn --batch-mode clean deploy
