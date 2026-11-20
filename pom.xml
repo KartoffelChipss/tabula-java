@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>technology.tabula</groupId>
+    <groupId>org.strassburger</groupId>
     <artifactId>tabula</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
     <name>Tabula</name>
-    <description>Extract tables from PDF files</description>
-    <url>http://github.com/tabulapdf/tabula-java</url>
+    <description>Extract tables from PDF files (fork of tabulapdf/tabula-java with updated dependencies)</description>
+    <url>https://github.com/KartoffelChipss/tabula-java</url>
 
     <licenses>
         <license>
@@ -15,42 +15,10 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <name>Manuel Aristaran</name>
-            <organization>Tabula</organization>
-            <organizationUrl>http://github.com/tabulapdf</organizationUrl>
-        </developer>
-        <developer>
-            <name>Jeremy B. Merrill</name>
-            <organization>Tabula</organization>
-            <organizationUrl>http://github.com/tabulapdf</organizationUrl>
-        </developer>
-        <developer>
-            <name>Mike Tigas</name>
-            <organization>Tabula</organization>
-            <organizationUrl>http://github.com/tabulapdf</organizationUrl>
-        </developer>
-    </developers>
-
-    <repositories>
-        <repository>
-            <id>snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <scm>
-        <connection>scm:git:git@github.com:tabulapdf/tabula-java.git</connection>
-        <developerConnection>scm:git:git@github.com:tabulapdf/tabula-java.git</developerConnection>
-        <url>git@github.com:tabulapdf/tabula-java.git</url>
-        <tag>v1.0.2</tag>
+        <connection>scm:git:https://github.com/KartoffelChipss/tabula-java.git</connection>
+        <developerConnection>scm:git:git@github.com:KartoffelChipss/tabula-java.git</developerConnection>
+        <url>https://github.com/KartoffelChipss/tabula-java</url>
     </scm>
 
     <properties>
@@ -59,14 +27,14 @@
     </properties>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>strassburger-releases</id>
+            <url>https://maven.strassburger.org/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>strassburger-snapshots</id>
+            <url>https://maven.strassburger.org/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <reporting>
@@ -84,18 +52,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.7.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <stagingProfileId>40766864c3b853</stagingProfileId>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -126,26 +82,6 @@
               </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
@@ -171,7 +107,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
-                    <!-- Travis build workaround -->
+                    <!-- Extra heap for the test suite -->
                     <argLine>-Xms1024m -Xmx2048m</argLine>
                 </configuration>
             </plugin>
@@ -187,59 +123,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.8.0</version>
-                        <configuration>
-                            <source>8</source>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.4</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>
