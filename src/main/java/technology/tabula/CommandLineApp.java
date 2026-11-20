@@ -30,8 +30,15 @@ import technology.tabula.writers.Writer;
 
 public class CommandLineApp {
 
-    private static String VERSION = "1.0.6-SNAPSHOT";
+    // Set from the jar manifest (Implementation-Version), which Maven fills from the pom version
+    private static String VERSION = getVersion();
     private static String VERSION_STRING = String.format("tabula %s (c) 2012-2020 Manuel Aristarán", VERSION);
+
+    private static String getVersion() {
+        String version = CommandLineApp.class.getPackage().getImplementationVersion();
+        return version != null ? version : "dev";
+    }
+
     private static String BANNER = "\nTabula helps you extract tables from PDFs\n\n";
 
     private static final int RELATIVE_AREA_CALCULATION_MODE = 0;

@@ -1,4 +1,4 @@
-tabula-java [![Build Status](https://travis-ci.org/tabulapdf/tabula-java.svg?branch=master)](https://travis-ci.org/tabulapdf/tabula-java)
+tabula-java [![Java CI](https://github.com/KartoffelChipss/tabula-java/actions/workflows/tests.yml/badge.svg)](https://github.com/KartoffelChipss/tabula-java/actions/workflows/tests.yml)
 ===========
 
 > [!NOTE]
@@ -9,16 +9,52 @@ tabula-java [![Build Status](https://travis-ci.org/tabulapdf/tabula-java.svg?bra
 
 © 2014-2020 Manuel Aristarán. Available under MIT License. See [`LICENSE`](LICENSE).
 
-## Download
+## Installation
 
-Download a version of the tabula-java's jar, with all dependencies included, that works on Mac, Windows and Linux from our [releases page](../../releases).
+This fork is published to `https://maven.strassburger.org/releases` under the group `org.strassburger`. Replace `VERSION` with the latest [release](../../releases).
+
+> [!IMPORTANT]
+> Versions 2.x use **PDFBox 3**, while upstream's 1.0.5 used PDFBox 2. If you're coming from upstream 1.0.5, update your PDFBox calls, e.g. `PDDocument.load(...)` becomes `Loader.loadPDF(...)`.
+
+**Maven**
+
+```xml
+<repositories>
+    <repository>
+        <id>strassburger</id>
+        <url>https://maven.strassburger.org/releases</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>org.strassburger</groupId>
+        <artifactId>tabula</artifactId>
+        <version>VERSION</version>
+    </dependency>
+</dependencies>
+```
+
+**Gradle (Kotlin DSL)**
+
+```kotlin
+repositories {
+    maven("https://maven.strassburger.org/releases")
+}
+
+dependencies {
+    implementation("org.strassburger:tabula:VERSION")
+}
+```
+
+To use the command-line tool, build the jar with all dependencies included (see [_Building from Source_](#building-from-source)).
 
 ## Commandline Usage Examples
 
 `tabula-java` provides a command line application:
 
 ```
-$ java -jar target/tabula-1.0.5-jar-with-dependencies.jar --help
+$ java -jar target/tabula-<version>-jar-with-dependencies.jar --help
 usage: tabula [-a <AREA>] [-b <DIRECTORY>] [-c <COLUMNS>] [-f <FORMAT>]
        [-g] [-h] [-i] [-l] [-n] [-o <OUTFILE>] [-p <PAGES>] [-r] [-s
        <PASSWORD>] [-t] [-u] [-v]
@@ -73,7 +109,7 @@ Tabula helps you extract tables from PDFs
  -v,--version               Print version and exit.
 ```
 
-It also includes a debugging tool, run `java -cp ./target/tabula-1.0.5-jar-with-dependencies.jar technology.tabula.debug.Debug -h` for the available options.
+It also includes a debugging tool, run `java -cp ./target/tabula-<version>-jar-with-dependencies.jar technology.tabula.debug.Debug -h` for the available options.
 
 You can also integrate `tabula-java` with any JVM language. For Java examples, see the [`tests`](src/test/java/technology/tabula/) folder.
 
@@ -90,8 +126,7 @@ JVM start-up time is a lot of the cost of the `tabula` command, so if you're try
 A simple Java code example which extracts all rows and cells from all tables of all pages of a PDF document:
 
 ```java
-InputStream in = this.getClass().getResourceAsStream("my.pdf");
-try (PDDocument document = PDDocument.load(in)) {
+try (PDDocument document = Loader.loadPDF(new File("my.pdf"))) {
     SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
     PageIterator pi = new ObjectExtractor(document).extract();
     while (pi.hasNext()) {
@@ -133,6 +168,8 @@ Clone this repo and run:
 ```
 mvn clean compile assembly:single
 ```
+
+This creates `target/tabula-<version>-jar-with-dependencies.jar`, which includes all dependencies and can be run with `java -jar`.
 
 ## Contributing
 
